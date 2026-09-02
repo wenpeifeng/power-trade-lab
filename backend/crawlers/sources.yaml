@@ -1,0 +1,233 @@
+# 电力交易数据源完整配置
+# 覆盖：国家政策 / 区域监管 / 省级交易中心 / 行业资讯 / 公共数据
+# 用法：爬虫按此配置多源采集，按 type + province 分类沉淀到知识库
+
+sources:
+  # ============ 一、国家级政策源（最高权威）============
+  - key: ndrc
+    name: 国家发展和改革委员会
+    url: http://www.ndrc.gov.cn
+    section_urls:
+      - https://www.ndrc.gov.cn/xxgk/zcfb/tz/        # 通知文件
+      - https://www.ndrc.gov.cn/xxgk/zcfb/fzggwl/     # 发展规划
+    type: national_policy
+    grid: null
+    crawl: list_detail            # 列表页→详情页
+    keywords: [电力, 市场, 电价, 能源, 交易, 现货, 储能, 绿电]
+
+  - key: nea
+    name: 国家能源局
+    url: http://www.nea.gov.cn
+    section_urls:
+      - https://www.nea.gov.cn/zwfw/zcfg/             # 政策法规
+      - https://www.nea.gov.cn/xxgk/                  # 信息公开
+    type: national_policy
+    crawl: list_detail
+    keywords: [电力, 市场, 交易, 辅助服务, 安全, 储能, 新能源]
+
+  - key: gov_cn
+    name: 中国政府网(国务院)
+    url: https://www.gov.cn
+    section_urls:
+      - https://www.gov.cn/zhengce/zhengceku/         # 政策库
+    type: national_policy
+    crawl: list_detail
+    keywords: [电力, 能源, 市场, 国民经济, 发展规划]
+
+  - key: epta
+    name: 中电联人才测评中心
+    url: https://www.epta.org.cn
+    section_urls:
+      - https://www.epta.org.cn/home                   # 考试通知
+    type: exam_info               # 考试报名/通知
+    crawl: list_detail
+    keywords: [电力交易员, 考试, 报名, 鉴定, 职业技能]
+
+  # ============ 二、区域能源监管局（分片区）============
+  - key: nea_huabei
+    name: 国家能源局华北监管局
+    url: http://hbj.nea.gov.cn
+    section_urls: [http://hbj.nea.gov.cn]
+    type: regulation
+    region: 华北                  # 京/津/冀/晋/蒙西/鲁
+    crawl: list_detail
+    keywords: [电力, 市场, 交易, 规则, 监管]
+
+  - key: nea_dongbei
+    name: 国家能源局东北监管局
+    url: http://dbj.nea.gov.cn
+    type: regulation
+    region: 东北                  # 辽/吉/黑/蒙东
+    crawl: list_detail
+    keywords: [电力, 市场, 交易]
+
+  - key: nea_xibei
+    name: 国家能源局西北监管局
+    url: http://xbj.nea.gov.cn
+    type: regulation
+    region: 西北                  # 陕/甘/青/宁/新
+    crawl: list_detail
+    keywords: [电力, 市场, 交易]
+
+  - key: nea_nanfang
+    name: 国家能源局南方监管局
+    url: http://nfj.nea.gov.cn
+    type: regulation
+    region: 南方                  # 粤/桂/滇/黔/琼
+    crawl: list_detail
+    keywords: [电力, 市场, 交易, 南方电网]
+
+  - key: nea_huadong
+    name: 国家能源局华东监管局
+    url: http://hdb.nea.gov.cn
+    type: regulation
+    region: 华东                  # 沪/苏/浙/皖/闽
+    crawl: list_detail
+    keywords: [电力, 市场, 交易]
+
+  - key: nea_huazhong
+    name: 国家能源局华中监管局
+    url: http://hzj.nea.gov.cn
+    type: regulation
+    region: 华中                  # 鄂/湘/豫/赣/川/渝
+    crawl: list_detail
+    keywords: [电力, 市场, 交易]
+
+  # ============ 三、省级电力交易中心（信息公开）============
+  # 说明：省级电力交易中心运营平台（如 pmos.*.sgcc.com.cn、pm.gd.csg.cn 等）
+  #   属受保护的信息系统，其市场经营数据应通过官方开放平台 API（各中心发布的
+  #   《数据接口接入指南》）以合规主体身份接入获取，本项目不实现对其的抓取。
+  #   本项目仅采集交易中心面向社会公开的信息披露/公告页面（见 exchange_center
+  #   适配器中的 EXCHANGE_SOURCES：广州 www.gzpec.cn、北京 www.bjpx.com.cn）。
+  #   下列 pmos_*/csg_gd 条目仅为占位说明，未接入任何适配器，不参与实际抓取。
+  # - key: pmos_zj
+  #   name: 浙江电力交易中心
+  #   url: https://zjpx.com.cn
+  #   section_urls: [https://zjpx.com.cn/pxf-settlement-outnetpub-phbzj/]
+  #   type: exchange_info
+  #   province: 浙江
+  #   grid: sgcc
+  #   crawl: playwright
+  #   keywords: [公告, 交易, 出清, 结果, 规则]
+  # - key: pmos_sh
+  #   name: 上海电力交易中心
+  #   url: https://pmos.sh.sgcc.com.cn
+  #   section_urls: [https://pmos.sh.sgcc.com.cn/pxf-settlement-outnetpub/]
+  #   type: exchange_info
+  #   province: 上海
+  #   grid: sgcc
+  #   crawl: playwright
+  # - key: pmos_sx
+  #   name: 山西电力交易中心
+  #   url: https://pmos.sx.sgcc.com.cn
+  #   type: exchange_info
+  #   province: 山西
+  #   grid: sgcc
+  #   crawl: playwright
+  # - key: pmos_sd
+  #   name: 山东电力交易中心
+  #   url: https://pmos.sd.sgcc.com.cn
+  #   type: exchange_info
+  #   province: 山东
+  #   grid: sgcc
+  #   crawl: playwright
+  # - key: csg_gd
+  #   name: 广东电力交易中心
+  #   url: https://pm.gd.csg.cn
+  #   type: exchange_info
+  #   province: 广东
+  #   grid: csg
+  #   crawl: playwright
+
+  # ============ 四、行业资讯与研究（学习素材）============
+  - key: cec
+    name: 中国电力企业联合会
+    url: https://www.cec.org.cn
+    section_urls: [https://www.cec.org.cn]
+    type: industry_news
+    crawl: list_detail
+    keywords: [电力, 市场, 统计, 报告, 标准]
+
+  - key: csg
+    name: 南方电网公司
+    url: https://www.csg.cn
+    type: industry_news
+    crawl: list_detail
+    keywords: [电力, 交易, 西电东送]
+
+  # ============ 五、公共数据（结构化时序数据）============
+  - key: nea_statistics
+    name: 国家能源局公开统计
+    url: https://www.nea.gov.cn/xwfb/index.htm
+    type: public_data
+    data_fields: [power_consumption, market_transaction, installed_capacity, utilization_hours, green_certificate, new_energy_projects]
+    crawl: list_detail_incremental
+    schedule: daily
+    provenance_level: observed_public
+
+  - key: gzpec_market
+    name: 广州电力交易中心公开行情
+    url: http://www.gzpec.cn/news/scyj/
+    type: public_data
+    data_fields: [period, province, market_stage, avg_price, avg_volume, green_certificate_price]
+    crawl: list_detail_incremental
+    schedule: daily
+    provenance_level: observed_public
+
+  - key: cneeex_carbon
+    name: 上海环境能源交易所全国碳市场
+    url: https://overview.cneeex.com/qgtpfqjy/mrgk/
+    type: public_data
+    data_fields: [date, open, high, low, close, volume, turnover]
+    crawl: list_detail_incremental
+    schedule: daily
+    provenance_level: observed_public
+    rights_note: 展示或转载须注明上海环境能源交易所并遵守原文声明
+
+  - key: nbs_energy
+    name: 国家统计局月度能源生产
+    url: https://www.stats.gov.cn/sj/zxfb/
+    type: public_data
+    data_fields: [month, coal, crude_oil, natural_gas, power_generation, generation_mix_yoy]
+    crawl: list_detail_incremental
+    schedule: daily
+    provenance_level: observed_public
+
+  - key: clearing_data
+    name: 各省出清价格数据
+    type: public_data             # 结构化数据(价格/负荷/出力)
+    data_fields: [date, province, product, clearing_price, load, renewable_output]
+    crawl: api                    # 走API接口
+    schedule: hourly              # 每小时更新
+
+  - key: coal_price
+    name: 动力煤价格指数
+    type: public_data
+    data_fields: [date, coal_type, price, port]
+    crawl: api
+    schedule: daily
+
+  - key: carbon_price
+    name: 全国碳市场价格
+    type: public_data
+    data_fields: [date, product, open, close, volume]
+    crawl: api
+    schedule: daily
+
+# ============ 分类体系 ============
+categories:
+  national_policy: 国家政策        # 发改委/能源局/国务院
+  regulation: 监管规则             # 区域监管局
+  exchange_info: 交易中心公告      # 省级交易中心
+  industry_news: 行业资讯          # 中电联/南网/行业
+  exam_info: 考试信息             # 中电联测评中心
+  public_data: 公共数据            # 出清价/煤价/碳价
+
+# ============ 沉淀策略 ============
+sediment:
+  # 政策/规则/公告 → 知识库文档(可检索)
+  docs: [national_policy, regulation, exchange_info, industry_news, exam_info]
+  # 结构化数据 → 数据市场(时序分析)
+  data: [public_data]
+  # 知识库自动关联：政策→知识点→题目
+  auto_link: true

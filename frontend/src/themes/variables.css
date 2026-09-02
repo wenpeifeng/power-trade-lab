@@ -1,0 +1,221 @@
+/* 双主题系统：浅色(学习) + 深色(交易)
+   通过 <html data-theme="learn|trade"> 切换。
+   学习模式：明亮、亲和、卡片式
+   交易模式：沉稳、专业、数据密集
+*/
+
+/* ============ 学习模式（浅色） ============ */
+:root,
+[data-theme='learn'] {
+  --bg-page: #f5f7fa;
+  --bg-card: #ffffff;
+  --bg-hover: #f0f4ff;
+  --bg-header: #ffffff;
+  --bg-sidebar: #fafbfc;
+
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+
+  --border-color: #e5e7eb;
+  --border-light: #f0f1f3;
+
+  --accent: #6366f1;        /* 靛蓝（与门户统一）*/
+  --primary: #6366f1;       /* 别名：部分组件用 --primary，一并统一 */
+  --accent-soft: #eef2ff;
+  --accent-green: #10b981;  /* 活力绿 */
+  --accent-orange: #f59e0b;
+  --accent-red: #f56565;
+
+  /* Element Plus 主色统一为靛蓝，让所有 el-button/el-tabs/el-select 与门户协调 */
+  --el-color-primary: #6366f1;
+  --el-color-primary-light-3: #818cf8;
+  --el-color-primary-light-5: #a5b4fc;
+  --el-color-primary-light-7: #c7d2fe;
+  --el-color-primary-light-8: #dde0fe;
+  --el-color-primary-light-9: #eef2ff;
+  --el-color-primary-dark-2: #4f46e5;
+
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 6px 20px rgba(99, 102, 241, 0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+/* ============ 交易模式（深色） ============ */
+[data-theme='trade'] {
+  --bg-page: #0e1116;
+  --bg-card: #1e222d;
+  --bg-hover: #262b38;
+  --bg-header: #161922;
+  --bg-sidebar: #161922;
+
+  --text-primary: #e0e3eb;
+  --text-secondary: #8a8f9c;
+  --text-tertiary: #5a5f6c;
+
+  --border-color: #2a2e3a;
+  --border-light: #232730;
+
+  --accent: #2962ff;        /* 交易蓝 */
+  --accent-soft: #1a2845;
+  --accent-green: #26a69a;  /* 跌-绿 */
+  --accent-orange: #ff9500;
+  --accent-red: #ef5350;    /* 涨-红 */
+
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --radius: 8px;
+  --radius-sm: 6px;
+}
+
+/* ============ 数据资产模式（电气蓝 + 实时青） ============
+   不是灰色后台：更高明度、更清透，强调数据流、可信度和实时状态。 */
+[data-theme='asset'] {
+  --bg-page: #f2f9ff;
+  --bg-card: #ffffff;
+  --bg-hover: #edf7ff;
+  --bg-header: #ffffff;
+  --bg-sidebar: #f6fbff;
+
+  --text-primary: #122b45;
+  --text-secondary: #526d86;
+  --text-tertiary: #8297aa;
+
+  --border-color: #d7e7f3;
+  --border-light: #e8f1f8;
+
+  --accent: #1976d2;
+  --primary: #1976d2;
+  --accent-soft: #e8f3ff;
+  --accent-green: #08a99a;
+  --accent-orange: #d98b28;
+  --accent-red: #d85f62;
+
+  --el-color-primary: #1976d2;
+  --el-color-primary-light-3: #5a9de0;
+  --el-color-primary-light-5: #8bbbea;
+  --el-color-primary-light-7: #bad7f3;
+  --el-color-primary-light-8: #d3e7f8;
+  --el-color-primary-light-9: #eaf4fd;
+  --el-color-primary-dark-2: #125da8;
+
+  --shadow-card: 0 8px 28px rgba(31, 91, 145, .08);
+  --shadow-hover: 0 16px 38px rgba(31, 91, 145, .15);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+/* ============ 知识库模式（索引钴蓝 + 认知青） ============
+   比学习中心更理性、检索导向；比数据资产更偏“文档与关联”。 */
+[data-theme='knowledge'] {
+  --bg-page: #f4f7ff;
+  --bg-card: #ffffff;
+  --bg-hover: #eef3ff;
+  --bg-header: rgba(255,255,255,.94);
+  --bg-sidebar: #f8faff;
+
+  --text-primary: #182744;
+  --text-secondary: #63718a;
+  --text-tertiary: #94a0b4;
+
+  --border-color: #dfe6f4;
+  --border-light: #edf1f8;
+
+  --accent: #4168dc;
+  --primary: #4168dc;
+  --accent-soft: #eaf0ff;
+  --accent-green: #16a6a9;
+  --accent-orange: #e18b36;
+  --accent-red: #df6268;
+
+  --el-color-primary: #4168dc;
+  --el-color-primary-light-3: #7693e6;
+  --el-color-primary-light-5: #9eb2ed;
+  --el-color-primary-light-7: #c5d0f5;
+  --el-color-primary-light-8: #d9e1f9;
+  --el-color-primary-light-9: #edf1fd;
+  --el-color-primary-dark-2: #3152b9;
+
+  --shadow-card: 0 8px 28px rgba(50, 78, 145, .08);
+  --shadow-hover: 0 16px 38px rgba(50, 78, 145, .15);
+  --radius: 14px;
+  --radius-sm: 9px;
+}
+
+/* ============ 全局基础 ============ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* 交易模式用等宽数字对齐 */
+[data-theme='trade'] body {
+  font-feature-settings: 'tnum';
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* 通用过渡 — 路由切换：淡入 + 轻微上滑，配合 App.vue 的 mode="out-in" */
+.fade-enter-active {
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-leave-active {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.fade-enter-from {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-enter-active, .fade-leave-active { transition: opacity 0.15s; }
+  .fade-enter-from, .fade-leave-to { transform: none; }
+}
+
+/* ============ 品牌弹窗（补充字段 / 系统设置）统一美化 ============ */
+.brand-dialog.el-dialog { border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(31, 41, 55, 0.18); }
+.brand-dialog .el-dialog__header {
+  padding: 18px 22px; margin-right: 0;
+  background: linear-gradient(180deg, #eef1ff, #ffffff);
+  border-bottom: 1px solid #eef0f5;
+}
+.brand-dialog .el-dialog__title { font-weight: 700; color: #1f2937; letter-spacing: -0.2px; }
+.brand-dialog .el-dialog__headerbtn { top: 16px; }
+.brand-dialog .el-dialog__body { padding: 22px; }
+.brand-dialog .el-dialog__footer { padding: 14px 22px 20px; border-top: 1px solid #f3f4f8; }

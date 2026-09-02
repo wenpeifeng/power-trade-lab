@@ -1,0 +1,66 @@
+name: Bug 报告
+description: 报告可复现的功能、数据或界面问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈。请勿粘贴 API Key、Cookie、密码、私钥、数据库或含个人信息的截图。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题描述
+      description: 发生了什么？你期望看到什么？
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 进入...
+        2. 点击...
+        3. 看到...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 版本或提交
+      placeholder: commit SHA / tag
+  - type: dropdown
+    id: area
+    attributes:
+      label: 涉及模块
+      options:
+        - 门户
+        - 学习/刷题/考试
+        - 教材工坊
+        - 仿真交易
+        - 政策公告/知识库
+        - 数据资产/爬虫
+        - AI
+        - 安装/部署
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 操作系统、Python、Node.js 和浏览器版本；不要附带环境变量值。
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 脱敏后的日志或截图
+      description: 删除用户名、本机路径、Token、Cookie、API Host、项目 ID 和教材内容。
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前确认
+      options:
+        - label: 我已搜索现有 Issue，未发现相同问题
+          required: true
+        - label: 我确认内容中没有账号、凭证或个人数据
+          required: true

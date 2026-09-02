@@ -1,0 +1,44 @@
+name: 功能建议
+description: 提议新的学习、数据或仿真能力
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 用户场景
+      description: 谁在什么情况下遇到了什么问题？
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: 建议方案
+      description: 希望系统如何引导、操作和反馈？
+    validations:
+      required: true
+  - type: dropdown
+    id: loop
+    attributes:
+      label: 所属能力闭环
+      options:
+        - 规则与真实数据
+        - 引导学习与教材
+        - 刷题与考试
+        - 交易仿真
+        - 出清/结算/复盘
+        - 跨模块闭环
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 规则或数据依据
+      description: 如涉及电力市场规则，请提供官方来源、适用省份和版本。
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+      description: 用可观察、可测试的结果描述完成条件。
+    validations:
+      required: true

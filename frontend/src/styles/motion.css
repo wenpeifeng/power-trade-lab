@@ -1,0 +1,166 @@
+/**
+ * 全局动效系统
+ * 挂在 main.js 全局引入，所有页面自动获得这些能力
+ *
+ * 设计理念：清新自然、克制有节奏，不是炫技
+ */
+
+/* ============ 进入动画（页面加载/滚入视口）============ */
+
+/* 渐入上移 */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.fade-up-1 { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
+.fade-up-2 { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
+.fade-up-3 { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+.fade-up-4 { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
+
+/* 渐入缩放 */
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.fade-in-scale { animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* 渐入左移 */
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.fade-right { animation: fadeRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* 视口滚入 */
+.reveal-in {
+  animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ============ 持续微动画（呼吸/浮动）============ */
+
+/* 呼吸 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.92; }
+}
+.breathe { animation: breathe 3s ease-in-out infinite; }
+
+/* 浮动 */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.float { animation: float 4s ease-in-out infinite; }
+.float-slow { animation: float 7s ease-in-out infinite; }
+
+/* 光泽扫过 */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* 脉冲点 */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.3); }
+  50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, 0); }
+}
+.pulse-dot { animation: pulse-dot 2s infinite; }
+
+/* ============ Hover 微交互 ============ */
+
+/* 卡片悬浮 */
+.lift-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.lift-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* 图标弹跳 */
+.icon-bounce {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lift-card:hover .icon-bounce,
+.lift-card:hover .icon-bounce {
+  transform: scale(1.12) rotate(-6deg);
+}
+
+/* 按钮按压 */
+.press-btn {
+  transition: all 0.15s ease;
+}
+.press-btn:active {
+  transform: scale(0.96);
+}
+
+/* 箭头跟随 */
+.arrow-follow {
+  transition: gap 0.2s ease;
+}
+.arrow-follow:hover { gap: 8px; }
+
+/* ============ 加载动画 ============ */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin { animation: spin 0.8s linear infinite; }
+
+/* 思考三点 */
+@keyframes think-bounce {
+  0%, 70%, 100% { transform: translateY(0); opacity: 0.4; }
+  35% { transform: translateY(-6px); opacity: 1; }
+}
+.think-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; background: currentColor; margin: 0 2px;
+  animation: think-bounce 1.4s infinite;
+}
+.think-dot:nth-child(2) { animation-delay: 0.15s; }
+.think-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ============ 渐变文字 ============ */
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-shimmer {
+  background: linear-gradient(90deg, #1e293b, #6366f1, #2563eb, #1e293b);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ============ 毛玻璃 ============ */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============ 滚动条美化 ============ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.5); }
+
+/* ============ 无障碍：尊重 reduced-motion ============ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
