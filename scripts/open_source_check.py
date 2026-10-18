@@ -21,12 +21,13 @@ LOCAL_ONLY_FILES = {
 LOCAL_ONLY_PREFIXES = (
     "data/credentials/", "data/learning_books/", "data/attachments/",
     "data/history/", "data/raw/", "data/uploads/", "data/private/",
-    ".zcode/", "backend/logs/",
+    ".zcode/", ".run/", "logs/", "backend/logs/",
 )
 REQUIRED_GITIGNORE_RULES = {
     ".env", "*.pem", "*.key", "data/credentials/", "data/learning_books/",
     "data/attachments/", "data/raw/", "*.db", "*.bak-*",
     "frontend/node_modules/", "backend/.venv/", ".zcode/", ".superpowers/",
+    "/logs/", "/.run/",
 }
 TEXT_SUFFIXES = {
     ".py", ".js", ".ts", ".vue", ".json", ".toml", ".yaml", ".yml",

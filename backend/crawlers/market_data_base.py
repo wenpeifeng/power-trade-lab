@@ -67,6 +67,7 @@ class MarketDataCrawler:
 
     def __init__(self, db: Optional[Session] = None):
         self.db = db or SessionLocal()
+        self.rate_limit = settings.CRAWLER_RATE_LIMIT_SEC
         self._last_request_time = 0.0
         self.crawl_stats: dict[str, int] = {}
 

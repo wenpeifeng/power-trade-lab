@@ -184,7 +184,7 @@ Expected: 无新增失败（已有失败若与本改动无关则记录，不阻�
 
 - [ ] **Step 2: 启动前后端验证**
 
-Run backend: `cd backend && bash ../start.sh` 或按 `docs/系统启动指南.md` 起服务。
+Run services: `./script/sh/start-all.sh` 或按 `docs/系统启动指南.md` 起服务。
 Run frontend: `cd frontend && npm run dev`
 
 用**非 admin 账号**登录 → 首页点「数据资产」→ 预期：进入 `/asset` 页面、统计与时间线正常加载（不再静默跳回首页）。点 ingest/curl 提交 → 预期：后端返回 403（前端原有错误提示即可）。

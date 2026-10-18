@@ -1,406 +1,304 @@
-# ⚡ Power Trade Lab · 电力交易演练台
+# Power Trade Lab · 电力交易演练台
 
-> 面向中国电力市场学习者的开源「学、练、考、仿真、复盘」一体化平台。
+> 一个可在本机部署的电力市场学习、考试与日前交易仿真平台。
 
-**[English](README.en.md)** | 简体中文
+[English](README.en.md) · [快速开始](#快速开始) · [配置说明](#配置说明) · [开发与验证](#开发与验证) · [已知限制](#已知限制)
 
-[快速开始](#-快速开始) · [能力闭环](#-产品能力闭环) · [配置](#️-配置哪些必填哪些选填) · [开发与验证](#️-开发与验证) · [任务与完成定义](#-任务与完成定义) · [已知限制](#️-已知限制坦诚边界)
+Power Trade Lab 面向电力市场学习者、备考人员、从业者和二次开发者，把课程、刷题、考试、政策与知识资料、数据资产以及教学仿真放在同一个 Web 应用中。它适合个人学习、培训演示和业务原型研究，不是持牌交易系统，不连接真实交易通道，也不能作为真实交易决策依据。
 
-<p>
-  <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white">
-  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.141-009688?logo=fastapi&logoColor=white">
-  <img alt="Vue" src="https://img.shields.io/badge/Vue-3-42B883?logo=vuedotjs&logoColor=white">
-  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
-  <img alt="Node" src="https://img.shields.io/badge/Node.js-20%2B-339933?logo=nodedotjs&logoColor=white">
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg">
-  <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-5B67F1">
-</p>
-<a href="https://github.com/wenpeifeng/power-trade-lab/stargazers">
-  <img alt="Stars" src="https://img.shields.io/github/stars/wenpeifeng/power-trade-lab?style=social">
-</a>
+## 核心能力
 
-电力交易不是一张行情图，也不是把股票终端换成电力术语。本项目把**真实规则、公开数据、主动学习和可复现仿真**放进同一条能力闭环：
+- **学习与诊断**：知识点树、入门诊断、8 节内置引导课程、今日任务和学习进度。
+- **刷题与考试**：筛选组卷、答题判分、模拟考试、错题去重和间隔复习。
+- **教材工坊**：上传 PDF、DOC、DOCX，维护章节、笔记、章节测验和阅读进度；文本型 PDF 可本地解析，复杂文档可选接入 MinerU。
+- **政策与知识库**：政策筛选、用户级已读状态、知识文档、公共数据查询，以及关键词、向量和 BM25 混合检索。
+- **数据资产管理**：通过文件、手工、cURL、API、RSS、Excel/CSV 等入口导入数据，记录来源、质量、审核状态和增量采集账本。
+- **日前交易教学仿真**：当前提供售电公司日前购电、发电企业日前售电两类 24 时段单人场景，覆盖简报、申报、封盘、出清、结算和复盘。
+- **可选 AI 助手**：用户自行配置模型服务和 API Key；Key 使用部署级主密钥加密保存在本部署数据库中。未配置模型时只返回知识召回结果。
 
-```text
-规则与真实数据 → 知识库与课程 → 刷题与考试 → 交易仿真 → 结算复盘 → 薄弱点再学习 ↺
-```
+需要注意：只有新的单人日前仿真保存规则版本、引擎版本、随机种子和完整快照。旧交易终端仍包含非固定随机数据，因此不能把“全系统仿真”描述为完全可复现。仿真复盘目前会给出知识薄弱点和下一步建议，但尚未自动写回学习计划。
 
-如果这个方向对你有帮助，欢迎点一个 **Star** ⭐——它会帮助更多电力市场学习者发现项目，也会决定我们优先完善哪些省份、规则和仿真场景。
+## 服务与模块
 
----
-
-## 📖 30 秒了解
-
-### 这是什么
-
-一套可以自己部署的电力市场教学与研究环境：从中长期、日前、实时到辅助服务的**规则学习**、**刷题备考**、**申报出清结算全流程仿真**，到**可解释复盘**，全部在一个本地可跑的全栈应用里完成。
-
-### 适合谁用
-
-| 你是…… | 你的痛点 | Power Trade Lab 给你 |
+| 模块 | 职责 | 直接依赖 |
 |---|---|---|
-| 🎓 电力市场小白 | 中长期、日前、实时、辅助服务分不清，不知道第一笔申报怎么下 | 分层诊断 → 引导课程 → 从零建立业务认知 |
-| 📝 备考人员 | 题库和知识点割裂，答错后缺来源、缺解析、缺复习 | 错题关联知识点与原文，间隔复习闭环 |
-| 📈 学习型交易员 | 政策、公告、行情、天气数据分散，难以形成可追踪资产 | 数据资产中心：增量采集、去重、质量评分、来源追踪 |
-| 🔧 开发者 | 缺一个能承载课程+规则+数据+仿真+复盘的开源业务底座 | FastAPI + Vue 3 全栈架构，MIT 协议自由扩展 |
+| `frontend/` | Vue 单页应用，提供登录、学习、考试、知识库和交易界面 | 后端 `/api` |
+| `backend/app/` | FastAPI 路由、认证、业务逻辑、健康检查和应用生命周期 | SQLAlchemy、SQLite、本地文件目录 |
+| `backend/app/db/` | ORM 模型、建表和少量 SQLite 幂等补列 | SQLite |
+| `backend/crawlers/` | 公开政策、统计、行情和可选天气连接器 | APScheduler、外部公开站点 |
+| `backend/scripts/` | 管理员创建和数据维护脚本 | 后端虚拟环境和数据库 |
+| `backend/tests/` | 后端单元、契约与回归测试 | pytest、隔离数据库 |
+| `data/` | 本地凭证、教材、附件和原始数据 | 运行时生成，主要内容不提交 |
 
-### 它有什么不同
+项目没有 Redis、消息队列、Docker Compose 或必须单独启动的数据库服务。默认基础设施只有进程内访问的 SQLite 文件。
 
-1. **数据来源诚实分级**——所有行情与仿真数据明确标记 `observed_public` / `observed_authorized` / `reconstructed` / `synthetic` 四级来源。**绝不把重构或合成数据伪装成真实实时行情**。
-2. **仿真可复现**——同一场景、规则版本、输入数据、随机种子和申报集合，必然得到同一出清结果。
-3. **闭环而非拼盘**——复盘发现的薄弱点会回流成课程与题目推荐，而不是学、练、考、仿各管一段。
-4. **零配置可启动**——不填任何第三方 Key 也能跑通基础学习与仿真；AI、天气、文档解析全部是可选增强。
-5. **BYOK 设计**——不收集任何用户 API Key；需要 AI 能力时，每位用户在前端填自己的 Key，加密入库。
-
-> ⚠️ 本项目**不是**持牌交易系统，不提供投资建议，不能用于真实交易决策；它的目标是让学习过程**可解释、可复现、可追踪**。
-
-## ✨ 核心特性
-
-- 🏠 **门户与学习路径** —— 个人学习路径、能力进度、新手任务、跨系统入口
-- 📚 **学习中心** —— 分层诊断、引导课程、自由刷题、错题复习、模拟考试备考
-- 📄 **教材工坊** —— PDF/Word 导入、MinerU 转 Markdown、章节阅读、笔记与章节检查
-- 📊 **仿真交易** —— 行情、申报、持仓、订单簿、单人全流程场景、封盘、出清、结算、复盘
-- 📢 **政策公告** —— 官方日期倒排、分类、省份、已读状态、原文追踪
-- 🔍 **电力知识库** —— 分类树、多维标签、关键词/BM25/语义/混合检索、知识关联
-- 🗄️ **数据资产中心** —— 多源接入、增量采集、去重、质量评分、人工审核、资产时间线
-- 🤖 **AI 助手（可选）** —— 当前登录用户 BYOK，基于知识库引用回答，教材内容加工
-- 🌤️ **国内天气（可选）** —— 和风天气实况与逐小时预报，数据进入资产库供学习和仿真使用
-
-## 🔄 产品能力闭环
+## 系统架构
 
 ```mermaid
 flowchart LR
-    A[官方网站 / API / 文件] --> B[增量采集与唯一标识]
-    B --> C[数据质量与人工审核]
-    C --> D[知识库 / 规则库 / 时序数据]
-    D --> E[引导学习 / 教材工坊]
-    D --> F[刷题 / 考试]
-    D --> G[场景与交易仿真]
-    E --> H[能力证据]
-    F --> H
-    G --> I[出清 / 结算 / 复盘]
-    I --> H
-    H --> E
+    U[浏览器] --> V[Vue 3 + Vite]
+    V -->|Axios /api| F[FastAPI]
+    F --> A[认证与门户]
+    F --> L[学习 / 考试 / 教材]
+    F --> K[政策 / 知识库 / 数据资产]
+    F --> T[交易与日前仿真]
+    A --> ORM[SQLAlchemy]
+    L --> ORM
+    K --> ORM
+    T --> ORM
+    ORM --> DB[(SQLite)]
+    L --> FS[本地 data 目录]
+    K --> FS
+    K --> C[APScheduler 采集任务]
+    C --> EXT[公开网站 / 可选和风天气]
+    L -.可选 HTTP.-> M[MinerU]
+    K -.用户配置.-> AI[LLM / Ollama]
 ```
 
-## 🗂️ 功能全景
+启动后端时会依次创建本地目录、执行 `create_all`、运行少量幂等补列、补齐空表种子，然后启动进程内采集调度器。爬虫默认开启，启动约 30 秒后会尝试执行一次公开政策采集；不希望产生外部网络访问时，请在 `backend/.env` 中设置 `CRAWLER_ENABLED=false`。
 
-| 系统 | 已具备能力 | 当前定位 |
-|---|---|---|
-| 门户 | 个人学习路径、能力进度、新手任务、跨系统入口 | 稳定 |
-| 学习中心 | 分层诊断、引导课程、自由刷题、错题复习、考试备考 | 稳定迭代 |
-| 教材工坊 | PDF/Word 导入、MinerU 转 Markdown、章节阅读、笔记、章节检查 | Beta |
-| 仿真交易 | 行情、申报、持仓、订单簿、单人全流程场景、封盘、出清、结算、复盘 | Beta |
-| 政策公告 | 官方日期倒排、分类、省份、已读状态、原文追踪 | 稳定迭代 |
-| 电力知识库 | 分类树、多维标签、关键词/BM25/语义/混合检索、知识关联 | Beta |
-| 数据资产中心 | 多源接入、增量采集、去重、质量评分、人工审核、资产时间线 | 管理员功能 |
-| AI 助手 | 当前登录用户 BYOK、基于知识库引用回答、教材内容加工 | 可选增强 |
-| 国内天气 | 和风天气实况与逐小时预报，数据进入资产库供学习和仿真使用 | 默认关闭 |
+## 技术架构
 
-## 📸 演示与截图
+| 层 | 当前实现与主要版本 |
+|---|---|
+| 前端 | Vue 3.5、Vue Router 4.6、Element Plus 2.14、ECharts 6.1、Vite 8.1，JavaScript + Vue SFC |
+| 后端 | Python 3.11/3.12、FastAPI 0.141.1、Uvicorn 0.39.0、Pydantic 2.13、SQLAlchemy 2.0.51 |
+| 数据库 | SQLite；当前没有 PostgreSQL 驱动和正式迁移闭环 |
+| 调度与采集 | APScheduler 3.11.3、HTTPX、Beautiful Soup、Playwright（动态页面按需） |
+| 检索与 AI | jieba、rank-bm25、sentence-transformers；可选用户级 LLM/Ollama |
+| 文档处理 | pdfplumber、openpyxl；可选外部 MinerU 服务 |
+| 构建与测试 | npm、Vite、pytest、GitHub Actions |
 
-建议第一次了解项目时依次体验：
+前端锁文件中的 Puppeteer 25 要求 Node.js 22.12+；因此本项目统一以 **Node.js 22.12+** 作为支持基线，而不是笼统的 Node 20+。
 
-1. 门户的今日路径与能力闭环
-2. 引导学习的一节完整课程
-3. 教材工坊导入一本电力市场教材
-4. 单人全流程交易仿真
-5. 政策公告的原文追踪
-6. 数据资产的增量采集、审核和时间线
+## 项目目录
 
-项目发布前可将脱敏后的截图和录屏放入 `docs/showcase/`。推荐文件名、录屏脚本和隐私检查项见 [演示素材指南](docs/SHOWCASE.md)。README 不内置开发者本机截图，避免把用户名、教材、API Host 或业务数据误传到 GitHub。
+```text
+power-trade-lab/
+├── backend/
+│   ├── app/                   FastAPI、领域模块与 ORM
+│   ├── crawlers/              公开数据连接器与调度器
+│   ├── scripts/               管理员和数据维护脚本
+│   ├── tests/                 后端测试
+│   ├── requirements.txt       运行依赖
+│   ├── requirements-dev.txt   测试依赖
+│   └── .env.example           后端配置模板
+├── frontend/
+│   ├── src/                   页面、组件、路由和 API 封装
+│   ├── package.json
+│   ├── package-lock.json
+│   └── .env.example           前端可选配置模板
+├── data/                      本地数据与凭证，主要内容被 Git 忽略
+├── docs/                      架构、配置、业务与安全规范
+├── script/sh/                 一键启动、停止、状态和公共脚本
+├── scripts/                   仓库级检查工具
+├── .github/                   CI 与协作配置
+├── README.md
+├── LICENSE
+└── AGENTS.md
+```
 
-## 🚀 快速开始
+`backend/.venv/`、`frontend/node_modules/`、`frontend/dist/`、`logs/`、`.run/` 和 SQLite 数据库都是本地产物，不提交到仓库。
+
+## 快速开始
 
 ### 环境要求
 
-- macOS / Linux（Windows 建议使用 WSL2）
-- Python 3.11 或 3.12
-- Node.js 20+
-- npm
+- macOS 或 Debian/Ubuntu Linux；Windows 建议使用 WSL2。
+- Python 3.11 或 3.12。
+- Node.js 22.12+，并带 npm。
+- `curl`。
+- 不需要 Docker；仓库当前没有 Dockerfile 或 Compose 配置。
 
-### 本地启动
+脚本会复用已满足版本要求的工具。缺失工具时，它会在 macOS 上尝试使用 Homebrew、在 Debian/Ubuntu 上尝试使用 apt；系统不支持自动安装或安装后版本仍不满足时，会给出明确的手工安装方式。脚本不会通过未经确认的远程安装脚本安装 Node 或 Docker。
+
+### 克隆并启动
 
 ```bash
 git clone https://github.com/wenpeifeng/power-trade-lab.git
 cd power-trade-lab
 
-# 首次运行自动创建虚拟环境并安装依赖
-./start.sh
+./script/sh/start-all.sh
 ```
 
-访问：
+首次启动会创建 `backend/.venv/`、按锁文件安装依赖、创建 SQLite 表并写入内置演示种子。`sentence-transformers` 及其依赖体积较大，首次安装可能耗时较长；后续只有依赖缺失或锁文件变化时才会重新安装。
 
-- Web：<http://127.0.0.1:5173>
-- API 文档：<http://127.0.0.1:8000/docs>
+检查状态：
+
+```bash
+./script/sh/status-all.sh
+```
 
 停止服务：
 
 ```bash
-./stop.sh
+./script/sh/stop-all.sh
 ```
 
-第一次打开系统时注册普通账号即可。基础学习、刷题和仿真不要求配置天气、AI 或 MinerU。
+重复执行启动脚本时，只会停止 `.run/` 中记录且命令行属于当前项目的旧进程，再用当前代码重启。端口被其他程序占用时会直接报错，不会按端口误杀进程。日志写入 `logs/`，PID 写入 `.run/`；停止脚本不会删除数据库、日志、上传文件或其他业务数据。
 
-### 配置入口：只需填一个文件
+## 访问入口与登录
 
-整个项目**只有一个配置入口**：`backend/.env`（由 `backend/.env.example` 复制而来，已被 `.gitignore` 忽略）。
+| 入口 | 开发环境地址 | 说明 |
+|---|---|---|
+| Web | <http://127.0.0.1:5173> | Vite 开发服务器 |
+| 后端根地址 | <http://127.0.0.1:8000> | FastAPI |
+| API 文档 | <http://127.0.0.1:8000/docs> | 仅非生产环境开放 |
+| 进程健康 | <http://127.0.0.1:8000/health> | 不检查数据库 |
+| 数据库健康 | <http://127.0.0.1:8000/api/health> | 脚本校验 JSON 中的 `status=ok` |
 
-```bash
-cp backend/.env.example backend/.env
-# 按需编辑 backend/.env；开发环境保持留空也能跑
-```
-
-- **本地学习/开发**：不填任何 Key 也能启动，登录密钥和加密密钥会自动生成到本地 `data/credentials/`。
-- **关掉爬虫**：在 `.env` 里设 `CRAWLER_ENABLED=false` 即可，调度器不注册任何定时任务。
-- 爬取目标 URL 为各适配器内的出厂默认值，开箱即用，无需在 `.env` 填写；`backend/crawlers/sources.yaml` 是源目录说明文档（未接入运行时），仅供查阅。
-- 完整字段表见 [配置与部署说明](docs/CONFIGURATION.md)。
-
-### 教材与 PDF 解析依赖什么
-
-| 能力 | 依赖 | 是否需额外安装 | 说明 |
-|---|---|---|---|
-| 文本型 PDF 解析 | `pdfplumber`（Python 库） | 否，随 `requirements.txt` 装入 `backend/.venv` | 默认走这条链路，零额外安装 |
-| 复杂 PDF / 扫描件 / Word | [MinerU](https://github.com/opendatalab/MinerU) | 是，需单独部署为 HTTP 服务 | MinerU 是基于模型的文档解析服务（版面/OCR/表格），本项目只通过 HTTP 调用，不内置模型 |
-
-- MinerU 默认关闭（`MINERU_ENABLED=false`），不开启不影响基础学习和仿真；复杂 PDF 会降级用 `pdfplumber` 全文解析。
-- 如需开启：自行部署 MinerU 服务，在 `.env` 填 `MINERU_ENABLED=true` 与 `MINERU_API_URL`（如 `http://127.0.0.1:18000`）。本项目不负责安装 MinerU 模型权重。
-- 爬虫渲染交易中心动态页用 Playwright + Chromium，首次需执行 `backend/.venv/bin/playwright install chromium`（仅在使用交易中心爬虫时需要）。
-
-### 数据从哪来：跑爬虫 / 粘贴 curl 抓取
-
-仓库不附带业务数据——数据由你自行用「数据资产中心」的工具拉取，每个人拉自己的公开/自有内容，不存在再分发问题。下载者填数据的推荐路径：
-
-1. 建管理员：`backend/.venv/bin/python backend/scripts/create_admin.py`
-2. 登录 → 进「数据资产中心」
-3. 点「立即运行」爬公开源（政策/统计/行情/碳市场…），或用「cURL 快速抓取」粘贴一条 curl 命令把某篇网页立刻收进来；也支持上传文件、手动录入、Excel 批量、API 直连、RSS、飞书导入。
-
-全部工具的端点、前置与**可粘贴示例**见 [数据资产工具使用说明](docs/数据资产工具使用说明.md)。
-
-## 👤 管理员账号
-
-项目**没有默认管理员用户名和密码**，也不会在所有部署之间共享一个"统一管理员"。正确模型是：
-
-- 每个独立部署拥有自己的用户库和管理员。
-- 首次部署由部署者创建一个初始 Owner 管理员。
-- 个人本地部署建议只保留一个管理员。
-- 团队部署可以按需增加管理员，但每人使用独立账号，不共享密码。
-
-创建或将已有用户提升为管理员：
+项目有登录体系，但**没有默认账号、演示账号或默认密码**。第一次使用时可在登录页注册普通用户。需要管理员权限时，在服务启动且虚拟环境就绪后运行：
 
 ```bash
 backend/.venv/bin/python backend/scripts/create_admin.py
 ```
 
-脚本交互式读取用户名和密码，密码不会回显或写入日志。再次运行脚本可以配置其他管理员；这用于团队协作和灾备，不代表项目存在公共管理员账号。
+该脚本交互式创建管理员或提升已有用户，密码不会回显。不要为了演示而在源码、README 或公共数据库中加入共享密码。
 
-## ⚙️ 配置：哪些必填，哪些选填
+## 配置说明
 
-### 本地学习/开发
-
-**没有必须填写的第三方 Key。** 不创建 `backend/.env` 也能启动，开发环境会在被 Git 忽略的本地目录生成登录和加密密钥。
-
-### 生产部署必填
-
-| 参数 | 作用 |
-|---|---|
-| `ENVIRONMENT=production` | 启用生产安全校验 |
-| `JWT_SECRET_KEY` | 签发登录会话，必须使用强随机值 |
-| `LLM_CONFIG_MASTER_KEY` | 加密各用户自行填写的 AI Key |
-| `ALLOWED_HOSTS` | 允许访问后端的真实域名 |
-| `CORS_ORIGINS` | 允许访问 API 的前端 HTTPS Origin |
-| `DATABASE_URL` | 正式多用户部署建议使用 PostgreSQL，并自行安装驱动、验证迁移 |
-
-### 可选增强
-
-| 功能 | 开关/配置 | 不配置时 |
-|---|---|---|
-| 爬虫调度 | `CRAWLER_ENABLED`、`CRAWLER_RATE_LIMIT_SEC` 等 | 默认开启，仅采集公开政策/统计/行情与交易中心公开公告页 |
-| 用户 AI | 每位用户在页面中填写自己的 GLM 等 API Key | AI 解读与生成能力不可用，基础功能正常 |
-| MinerU 解析 | `MINERU_ENABLED`、`MINERU_API_URL` 等 | PDF 使用降级解析，复杂 PDF/Word 能力受限 |
-| 和风天气 | `QWEATHER_ENABLED` 和部署者自己的和风凭证 | 默认关闭，不会调用任何人的天气账号 |
-| 向量模型 | `KB_EMBEDDING_MODEL`、`KB_RERANKER_MODEL` | 使用本地默认或关键词检索降级 |
-| 前端代理 | `VITE_API_BASE_URL`、`VITE_DEV_API_TARGET` | 使用本地默认地址 |
-
-完整参数、示例和费用边界见 [配置与部署说明](docs/CONFIGURATION.md)。所有变量统一收口在 [`backend/.env.example`](backend/.env.example)（复制为 `backend/.env` 后填写），前端模板见 [`frontend/.env.example`](frontend/.env.example)。
-
-### 和风天气：默认关闭且不共享作者账号
-
-开源默认值是 `QWEATHER_ENABLED=false`。即使下载者没有和风账号，系统也能正常运行；只有部署者主动开启并填写自己的 API Host 与 JWT/API Key 凭证后，后台才会安排天气采集。项目状态接口也不会把专属 API Host 返回给浏览器，作者本机凭证不会随源码分发。
-
-## 🧱 技术栈
-
-| 层 | 技术 |
-|---|---|
-| 前端 | Vue 3、Vite、Element Plus、ECharts、VueUse Motion |
-| 后端 | FastAPI、Pydantic、SQLAlchemy、APScheduler |
-| 数据库 | SQLite（本地）/ PostgreSQL（推荐生产） |
-| 文档解析 | pdfplumber + 可选 MinerU 共享服务 |
-| 检索 | BM25、向量语义、混合检索与可选重排 |
-| 安全 | HttpOnly Cookie、角色权限、用户级 AI Key 加密、出站 SSRF 防护 |
-
-## 📁 目录结构
-
-按"源码 / 数据 / 文档 / 运行时依赖 / 配置入口"五层划分。带 ⓘ 的目录为运行时自动生成或本地数据，**不随源码提交**（已在 `.gitignore` 中忽略）。
-
-```text
-power-trade-lab/
-├── backend/                       后端源码
-│   ├── app/                       业务域：auth / study / exam / trade / knowledge / policy
-│   │   └── config.py              ⭐ 统一配置入口（读 backend/.env）
-│   ├── crawlers/                  公开数据增量采集
-│   │   ├── adapters/              各数据源适配器（URL 默认值在此）
-│   │   └── sources.yaml           源目录说明文档（未接入运行时，仅供查阅）
-│   ├── scripts/                   管理员与维护脚本（create_admin 等）
-│   ├── tests/                     离线契约与回归测试
-│   ├── .env.example               ⭐ 配置模板（复制为 .env 后填写）
-│   ├── .env                       ⓘ 本机配置（不提交）
-│   ├── requirements.txt           Python 依赖清单
-│   └── .venv/                     ⓘ Python 虚拟环境（start.sh 自动创建）
-├── frontend/                      前端源码（Vue 3 + Vite）
-│   ├── src/
-│   ├── .env.example               前端配置模板
-│   └── node_modules/              ⓘ JS 依赖（npm install 自动创建）
-├── data/                          本地运行数据
-│   ├── credentials/               ⓘ JWT/LLM/和风私钥（权限 600，不提交）
-│   ├── raw/public/                ⓘ 已采集的公开原始数据（不提交）
-│   ├── questions/ policies/ ...   业务数据目录
-├── docs/                          产品、架构、配置与开源说明
-├── scripts/                       仓库级脚本（开源泄密检查等）
-├── .github/                       PR 模板、Issue 模板、Dependabot
-├── start.sh / stop.sh             本地一键启停
-├── LICENSE                        MIT
-└── README.md / CONTRIBUTING.md / SECURITY.md / AGENTS.md
-```
-
-### 运行时依赖都装在哪
-
-| 依赖 | 安装位置 | 谁来装 | 何时需要 |
-|---|---|---|---|
-| Python 包（FastAPI、pdfplumber、playwright…） | `backend/.venv/` | `./start.sh` 首次运行 | 总是 |
-| JS 包（Vue、Vite、Element Plus…） | `frontend/node_modules/` | `./start.sh` 首次运行 | 总是 |
-| Puppeteer 浏览器 | Puppeteer 系统缓存 | 按需运行 `cd frontend && npx puppeteer browsers install chrome` | 仅浏览器 E2E |
-| Playwright Chromium 浏览器 | 系统缓存（`~/Library/Caches/ms-playwright/`） | `backend/.venv/bin/playwright install chromium` | 仅交易中心动态页爬虫需要 |
-| MinerU 解析服务 | 独立部署，HTTP 调用（不在本仓库） | 部署者自行安装运行 | 仅复杂 PDF/Word 解析需要 |
-| 和风天气、GLM 等 API | 远程服务，无需本地安装 | 在 `.env`/页面填凭证 | 可选 |
-
-> 仓库内**不内置任何模型权重或浏览器内核**；所有"重型依赖"要么在虚拟环境里、要么在系统缓存里、要么是远程服务，保持源码仓库轻量、可复现。
-
-## 🛠️ 开发与验证
+后端主配置来自系统环境变量和 `backend/.env`；前端构建/代理配置来自 `frontend/.env`。两者都提供 `.env.example`，实际 `.env` 被 Git 忽略。
 
 ```bash
-# 开源泄密检查（不打印秘密值）
-python3 scripts/open_source_check.py
-
-# 后端测试
-cd backend
-./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
-
-# 前端构建
-cd ../frontend
-npm run build
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env   # 仅需覆盖前端默认值时执行
 ```
 
-贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。系统设计基线见 [AGENTS.md](AGENTS.md) 与 [产品路线图](docs/交易模拟平台产品基线与路线图.md)。
+### 关键后端配置
 
-## ✅ 任务与完成定义
-
-本项目采用与「飞书大脑」一致的可验证任务格式：每个任务必须先冻结改动文件、输入输出契约和安全边界，再经历“失败测试 → 最小实现 → 自动验证 → 交付报告”。页面存在、代码提交或单个案例可运行，都不能单独算完成。
-
-当前工作流分成六条可独立验收的主线：
-
-| 任务流 | 交付结果 | 最低完成证据 |
+| 变量 | 代码默认值 | 作用 |
 |---|---|---|
-| T1 数据与规则底座 | 带来源、许可、版本和质量状态的数据资产 | 来源证据、增量/去重测试、失败样本 |
-| T2 学习与考试 | 课程、题目、错题和掌握度闭环 | 正常/边界/权限测试与可追溯引用 |
-| T3 仿真交易 | 申报、出清、结算、复盘的确定性链路 | 同种子复现、守恒对账、非法输入测试 |
-| T4 跨模块回流 | 复盘薄弱点回流课程与题目 | 端到端案例和回归结果 |
-| T5 数据接入与安全 | 公开/授权数据连接器与凭证隔离 | 双用户隔离、脱敏日志、撤销与降级测试 |
-| T6 安装与发布 | 新环境可复现安装、启动、验证和回滚 | 干净克隆、健康检查、真实注册/登录、重复启停 |
+| `ENVIRONMENT` | `development` | 设为 `production` 后启用生产安全校验并关闭 API 文档 |
+| `DEBUG` | `true` | 调试开关；生产应设为 `false` |
+| `DATABASE_URL` | `sqlite:///.../backend/power_trade.db` | SQLAlchemy 数据库 URL；当前开箱即用链路只验证 SQLite |
+| `ALLOWED_HOSTS` | `[]` | 生产允许的 Host；生产禁止空值和通配符 |
+| `CORS_ORIGINS` | 本地 5173/5174 地址 | 允许访问 API 的前端 Origin |
+| `JWT_SECRET_KEY` | 空 | 开发环境生成本机密钥文件；生产必须使用至少 32 字符强随机值 |
+| `LLM_CONFIG_MASTER_KEY` | 空 | 用户 AI Key 的 Fernet 加密主密钥；生产启用 BYOK 时必须显式配置 |
+| `CRAWLER_ENABLED` | `true` | 是否注册和允许执行公开数据采集任务 |
+| `CRAWLER_RATE_LIMIT_SEC` | `1.0` | 单个连接器请求之间的最小等待秒数 |
+| `MINERU_ENABLED` | `false` | 是否调用外部 MinerU 文档解析服务 |
+| `KB_EMBEDDING_MODEL` | `BAAI/bge-small-zh-v1.5` | 语义检索模型；首次使用需本地已有模型或允许下载 |
+| `KB_RERANKER_MODEL` | 空 | 可选重排模型；留空不启用 |
+| `QWEATHER_ENABLED` | `false` | 是否启用部署者自己的和风天气凭证 |
 
-任务模板、当前状态和提交前检查见 [项目任务与交付契约](docs/PROJECT_TASKS.md)。
+### 前端配置
 
-## ⚠️ 已知限制（坦诚边界）
+| 变量 | 默认值 | 作用 |
+|---|---|---|
+| `VITE_API_BASE_URL` | `/api` | 浏览器访问后端使用的 API 前缀 |
+| `VITE_DEV_API_TARGET` | `http://127.0.0.1:8000` | Vite 开发代理目标 |
 
-- 当前是教学与研究技术基线，不是持牌交易系统，也未达到真实交易生产标准。
-- SQLite 适合本地单机；PostgreSQL 迁移、正式 schema migration 和多实例部署尚未闭环。
-- 省级规则包、96 点约束、真实公开行情覆盖和可公开再分发的数据集仍在扩充。
-- AI、MinerU、和风天气与飞书导入均为可选外部能力；未配置时会关闭或降级，不能据此宣称对应能力已验证。
-- 当前自动化测试仍在补齐。任何“已完成”结论都应以任务文档中记录的实际命令、断言和真实链路证据为准。
+完整字段和生产边界见 [配置与部署说明](docs/CONFIGURATION.md)。不要把真实 API Key、Cookie、密码或私钥写进任何 `.env.example`、README、日志或提交记录。
 
-## 🗺️ 路线图
+## 初始化数据
 
-- [ ] 扩充省级规则包与真实公开行情数据
-- [ ] 完善 96 点多段申报、约束校验与确定性出清
-- [ ] 打通"复盘薄弱点 → 推荐课程/题目 → 下一次仿真"
-- [ ] 增加更多中长期、现货、零售、辅助服务、绿电与绿证场景
-- [ ] 建立可公开再分发的脱敏演示数据集
-- [ ] 完善 Docker、PostgreSQL、迁移工具和多实例部署
+当前没有 Alembic 等正式迁移工具。后端启动时执行：
 
-## ❓ 常见问题
+1. SQLAlchemy `create_all` 创建缺失表；
+2. 运行少量只针对 SQLite 的幂等补列；
+3. 仅在相应表为空时初始化知识点、市场、示例题、示例政策、考试蓝图、省份、知识文档、分类和 synthetic 公共数据。
 
-<details>
-<summary><b>这是持牌交易系统吗？能用于真实交易决策吗？</b></summary>
+内置种子随源码提交，并使用固定日期和值，因此干净环境首次启动得到一致的演示数据。它们是教学占位数据，不是完整、实时或经过逐条权威核验的官方数据集；synthetic 行也明确标记为 `synthetic`。重复启动不会清空已有表，也不会覆盖已有业务数据。
 
-不能。Power Trade Lab 是教学与研究环境，不接入任何真实交易通道，不提供投资建议。它的价值在于把学习过程做得可解释、可复现、可追踪。
+数据库默认位于 `backend/power_trade.db` 且被 Git 忽略。对重要本地数据应单独做文件级备份；不要把数据库提交到公开仓库。
 
-</details>
+## 项目难点与解决方案
 
-<details>
-<summary><b>数据采集合法合规吗？</b></summary>
+### 可回放的日前仿真
 
-爬虫只访问公开且允许使用的内容，遵守站点条款、robots.txt、频率和署名要求，不绕过登录、验证码或权限控制；省级交易中心运营平台（`pmos.*.sgcc.com.cn` 等受保护系统）不纳入采集，其数据应通过官方开放平台 API 以合规主体身份接入。所有数据携带来源等级，真实市场成员数据必须由有权用户授权导入。
+随机教学场景如果只保存结果，无法解释或复现。当前单人日前流程同时保存规则版本、引擎版本、随机种子、输入、申报、出清、结算和复盘快照，使同一输入能够重放。该能力目前只覆盖两种 24 时段日前场景，旧交易终端不在这一保证范围内。
 
-</details>
+### 数据来源和降级行为
 
-<details>
-<summary><b>必须配置各种 API Key 才能用吗？</b></summary>
+结构化公共数据记录来源等级、披露范围、原始内容哈希、解析器版本、质量和审核状态；没有可用归档行情时，交易页面会明确回退到 synthetic 数据，而不是伪装成实时行情。采集连接器仍需要部署者核对目标站点条款、授权范围和再分发许可。
 
-不需要。零配置即可启动并使用基础学习、刷题和仿真。AI 助手、和风天气、MinerU 文档解析均为可选增强，且全部遵循 BYOK（每人用自己的 Key）原则——项目不收集、不内置任何开发者的 Key。
+### 多用户凭证隔离
 
-</details>
+登录会话使用 HttpOnly Cookie；用户自行填写的 AI Key 使用部署级 Fernet 主密钥加密入库，前端只显示脱敏提示。开发环境可生成仅本机可读的密钥文件，生产环境必须自行提供并安全托管密钥。
 
-<details>
-<summary><b>支持哪些省份的交易规则？</b></summary>
+### 可选重型能力解耦
 
-当前以通用规则框架 + 部分省份场景为主，省级规则包正在扩充中（见路线图）。欢迎通过 Issue 或 PR 告诉我们你最需要哪个省份，或直接贡献规则包。
+MinerU 作为外部服务接入，未配置时文本型 PDF 仍可使用 pdfplumber；AI 未配置时只返回知识召回片段，不伪造模型回答。Playwright 浏览器和 MinerU 模型都不在基础启动阶段自动下载。
 
-</details>
+## 项目核心亮点
 
-<details>
-<summary><b>和直接看政策原文、刷题小程序相比，用它有什么优势？</b></summary>
+- 不配置第三方账号也能运行注册、学习、刷题、考试和基础日前仿真。
+- 学习、考试、教材和交易数据按当前用户隔离。
+- 单人日前仿真保留完整业务快照，结果可解释、可回放。
+- 数据模型包含来源、质量和审核字段，明确区分公开观测、授权、重构和合成数据。
+- 一键脚本使用锁文件、PID 身份和健康接口管理进程，重复执行不会删除业务数据。
+- 可选 AI、天气、MinerU 和动态页面采集不会成为基础服务的强依赖。
 
-散落的资料解决"看过"，不解决"学会"。本项目把规则、课程、题目、仿真和复盘串成闭环：答错的题能追溯到知识点与政策原文，仿真复盘暴露的薄弱点会变成下一轮学习推荐——每个环节都有证据可查。
+## 开发与验证
 
-</details>
+```bash
+# 开源文件、忽略规则和高置信秘密模式检查
+python3 scripts/open_source_check.py
 
-## 🔒 数据与版权边界
+# Python 语法检查
+backend/.venv/bin/python -m compileall backend/app backend/crawlers
 
-- 代码开源不等于第三方网页、附件、题库、书籍或交易数据可以重新分发。
-- 用户上传教材默认只归该用户使用，不自动进入公共知识库。
-- 爬虫只应访问公开且允许使用的内容，并遵守站点条款、robots.txt、频率和署名要求。
-- 真实市场成员数据必须由有权用户授权导入，不绕过登录、验证码或权限控制。
-- 发布演示库和数据集前，应逐项检查来源、许可、个人信息和原文链接。
+# 安装测试依赖并执行全部 pytest/unittest 风格后端用例
+backend/.venv/bin/python -m pip install -r backend/requirements-dev.txt
+(cd backend && .venv/bin/python -m pytest -q)
 
-以下内容永远不应提交：`backend/.env`、和风天气 Ed25519 私钥、项目 ID/凭据 ID/API Key 和专属 API Host、`data/credentials/`、数据库、教材、附件和原始抓取响应。
+# 前端依赖与生产构建
+(cd frontend && npm ci && npm run build)
 
-## 🤝 参与贡献
+# 脚本语法检查
+bash -n script/sh/common.sh script/sh/start-all.sh script/sh/stop-all.sh script/sh/status-all.sh
+```
 
-欢迎提交 Issue、补充省份规则、贡献题目来源或改进仿真机制：
+后端测试覆盖认证与权限、凭证加密和 SSRF 边界、学习与错题、考试诊断、知识检索、数据资产、增量采集、交易报价校验和单人仿真的确定性。前端当前没有独立的 lint、单元测试或通用 E2E npm 命令，`npm run build` 是现有可复现的前端门禁。管理员评估接口依赖运行数据，不等同于自动化测试。
 
-- 🐛 [报告 Bug / 提功能建议](.github/ISSUE_TEMPLATE/)（Issue 模板）
-- 📋 [贡献指南](CONTRIBUTING.md)
-- 🔐 [安全报告与漏洞披露](SECURITY.md)
-- 🏗️ [技术架构文档](docs/ARCHITECTURE.md) · [系统设计基线](AGENTS.md) · [产品路线图](docs/交易模拟平台产品基线与路线图.md)
+## 常见问题
 
-## ⭐ Star History
+### 8000 或 5173 端口被占用怎么办？
 
-[![Star History Chart](https://api.star-history.com/svg?repos=wenpeifeng/power-trade-lab&type=Date)](https://star-history.com/#wenpeifeng/power-trade-lab&Date)
+运行 `./script/sh/status-all.sh` 查看记录 PID、端口 PID 和异常状态。若端口属于其他程序，启动脚本会停止并报告，不会主动杀掉它；请自行停止占用程序后重试。
 
----
+### 为什么第一次启动很慢？
 
-## 📄 许可证
+后端包含 `sentence-transformers`，依赖体积较大；前端也需要按锁文件安装依赖。依赖安装成功后会记录锁文件哈希，后续启动会直接复用。
 
-本项目采用 [MIT License](LICENSE) 开源。
+### 必须安装 Docker 吗？
 
-也欢迎在 Star 后告诉我们：**你最希望先支持哪个省份、哪一种交易品种？** 你的回答会直接影响路线图的优先级。⚡
+不需要。仓库没有 Dockerfile、Compose 和容器化基础设施。状态脚本只报告本机 Docker 客户端/daemon 状态，不会安装、启动或停止 Docker，也不会碰用户的其他容器和 Volume。
+
+### 启动失败后看哪里？
+
+查看 `logs/backend.log` 和 `logs/frontend.log`，再执行 `./script/sh/status-all.sh`。脚本启动失败时会停止本次已启动且身份匹配的项目进程，但保留日志和数据库。
+
+### 为什么 API 文档访问不到？
+
+`/docs`、`/redoc` 和 `/openapi.json` 只在非生产模式开放。生产部署应使用单独维护的接口契约，而不是公开调试文档。
+
+### 为什么检索模型不能下载？
+
+代码默认按离线模式加载本地 embedding 模型，并在失败时降级。若要首次下载新模型，需要按 [配置文档](docs/CONFIGURATION.md) 准备模型缓存或在受控环境临时允许下载。
+
+### 启停脚本会清空数据吗？
+
+不会。`stop-all.sh` 只向两个经过身份校验的 PID 发信号；不会删除 SQLite、`data/`、日志、依赖或 Docker Volume。数据库重置必须由维护者另行备份并手工执行。
+
+## 已知限制
+
+- 当前完整仿真只覆盖日前、24 时段、售电/发电两个角色；96 点、撤单改单、机组组合、潮流约束和真实交易接入尚未形成完整链路。
+- 旧交易终端包含非固定随机行情和撮合；只有新的单人日前场景承诺快照和确定性。
+- 复盘知识薄弱点尚未自动写回学习计划。
+- SQLite 适合单机；当前没有正式 schema migration、PostgreSQL 驱动、多实例限流或高可用方案。
+- 内置政策、题目和文档是演示/占位数据，不是官方完整数据集；部分标为真题的内容缺少逐题原始来源证据。
+- 外部站点、天气、AI、MinerU 和动态页面采集是否可用，取决于部署者配置、网络和第三方服务条款。
+
+## 生产使用说明
+
+仓库默认配置只适合本地开发和教学演示。生产部署至少应：
+
+- 使用 `ENVIRONMENT=production`、`DEBUG=false`，配置强随机 `JWT_SECRET_KEY`、严格 `ALLOWED_HOSTS` 和 `CORS_ORIGINS`；启用用户 AI Key 时配置并备份 `LLM_CONFIG_MASTER_KEY`。
+- 在 HTTPS 反向代理后运行后端，限制数据库、上传目录和凭证目录的文件权限，建立备份与恢复演练。
+- 明确采集来源的访问条款、授权、频率、署名和再分发边界；默认开启的爬虫不代表所有站点已经获得使用授权。
+- 在迁移到 PostgreSQL、多实例或容器前，自行补齐数据库驱动、正式迁移、共享限流、持久化、监控和发布回滚。本仓库当前不提供可直接用于生产的 Docker 部署方案。
+- 不把演示数据、开发密钥或本地自动生成密钥当作生产凭证，也不创建共享默认密码。
+
+本项目采用 [MIT License](LICENSE)。提交改动前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)、[SECURITY.md](SECURITY.md) 和 [AGENTS.md](AGENTS.md)，并同步更新受影响的代码、测试和文档。

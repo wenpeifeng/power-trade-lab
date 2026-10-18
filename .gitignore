@@ -43,6 +43,8 @@ data/private/
 # Local agent plans and runtime logs
 .zcode/
 .superpowers/
+/logs/
+/.run/
 *.log
 *.pid
 backend/logs/

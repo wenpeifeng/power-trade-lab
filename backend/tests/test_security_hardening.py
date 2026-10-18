@@ -1,4 +1,5 @@
 """开源发布前的关键安全边界回归测试。"""
+import logging
 import stat
 import tempfile
 import unittest
@@ -167,6 +168,22 @@ class LogRedactionTests(unittest.TestCase):
         for secret in ("abc.def.ghi", "secret-value", "hunter2", "query-secret"):
             self.assertNotIn(secret, cleaned)
         self.assertIn("safe=1", cleaned)
+
+    def test_uvicorn_access_arguments_keep_formatter_shape(self):
+        from app.common.logging_security import SensitiveDataFilter
+
+        record = logging.LogRecord(
+            name="uvicorn.access",
+            level=logging.INFO,
+            pathname=__file__,
+            lineno=1,
+            msg='%s - "%s %s HTTP/%s" %d',
+            args=("127.0.0.1", "GET", "/api?token=secret-value", "1.1", 200),
+            exc_info=None,
+        )
+        self.assertTrue(SensitiveDataFilter().filter(record))
+        self.assertEqual(len(record.args), 5)
+        self.assertNotIn("secret-value", str(record.args))
 
 
 class ExternalInputSecurityTests(unittest.TestCase):

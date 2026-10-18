@@ -662,14 +662,19 @@ def _seed_knowledge(db):
             dedup_key=dedup,
         ))
 
-    # 公共数据种子（出清价格）
-    import random
-    provinces_data = [("山西", "day_ahead"), ("山东", "day_ahead"), ("广东", "day_ahead")]
-    for prov, prod in provinces_data:
+    # 公共数据种子（出清价格）。固定基准日和值，确保所有干净环境首次启动一致。
+    # 这些记录始终标记 synthetic / internal，不能当作真实市场行情使用。
+    seed_anchor = date(2026, 1, 7)
+    provinces_data = [
+        ("山西", "day_ahead", 302.5, 9200),
+        ("山东", "day_ahead", 318.4, 11300),
+        ("广东", "day_ahead", 336.8, 13700),
+    ]
+    for prov, prod, base_price, base_load in provinces_data:
         for days_ago in range(7):
-            d = (date.today() - timedelta(days=days_ago)).isoformat()
-            price = round(random.uniform(280, 380), 1)
-            load = round(random.uniform(8000, 15000))
+            d = (seed_anchor - timedelta(days=days_ago)).isoformat()
+            price = round(base_price + days_ago * 2.7, 1)
+            load = base_load + days_ago * 180
             dedup = hashlib.md5(f"clearing|{prov}|{d}".encode()).hexdigest()[:16]
             db.add(PublicData(
                 data_type="clearing", province=prov, data_date=d,

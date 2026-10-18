@@ -143,7 +143,7 @@ frontend/src/
 
 ### 5.2 存储选型
 
-- 本地默认 SQLite（零配置，随 `start.sh` 启动即用）；生产建议 PostgreSQL。
+- 本地默认 SQLite（零配置，随 `script/sh/start-all.sh` 启动即用）；当前仓库未提供 PostgreSQL 驱动和正式迁移链路。
 - 通过 SQLAlchemy ORM 隔离差异，业务代码不写数据库方言。
 - 当前未引入正式迁移工具（见第 9 节已知限制）。
 
@@ -223,7 +223,7 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph local["本地开发 / 个人部署（默认路径）"]
-        A["./start.sh"] --> B["backend/.venv<br/>uvicorn"]
+        A["./script/sh/start-all.sh"] --> B["backend/.venv<br/>uvicorn"]
         A --> C["frontend<br/>Vite dev server"]
         B --> D[("SQLite<br/>power_trade.db")]
     end

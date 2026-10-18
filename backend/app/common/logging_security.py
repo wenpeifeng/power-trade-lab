@@ -31,6 +31,14 @@ def redact_sensitive_text(value: object) -> str:
 class SensitiveDataFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
         try:
+            # Uvicorn 的 AccessFormatter 不通过 getMessage() 渲染，而是直接将
+            # 5 个参数解包后着色。保留其结构，只对字符串字段脱敏。
+            if record.name == "uvicorn.access" and isinstance(record.args, tuple):
+                record.args = tuple(
+                    redact_sensitive_text(value) if isinstance(value, str) else value
+                    for value in record.args
+                )
+                return True
             rendered = record.getMessage()
             record.msg = redact_sensitive_text(rendered)
             record.args = ()

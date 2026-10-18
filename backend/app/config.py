@@ -93,10 +93,14 @@ class Settings(BaseSettings):
         PROJECT_ROOT / "data" / "credentials" / "llm-master.key"
     )
 
+    # ---- 知识库检索 ----
+    KB_EMBEDDING_MODEL: str = "BAAI/bge-small-zh-v1.5"
+    KB_EMBEDDING_DIM: int = 512
+    KB_RERANKER_MODEL: str = ""
+
     # ---- 爬虫 ----
     # 总开关：false 时调度器不注册任何定时任务，手动触发也会立即返回跳过。
     CRAWLER_ENABLED: bool = True
-    CRAWLER_INTERVAL_HOURS: int = 24  # 定时爬取间隔
     CRAWLER_RATE_LIMIT_SEC: float = 1.0  # 请求间隔（≤1 req/s，规避反爬）
     CRAWLER_USER_AGENT: str = (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "

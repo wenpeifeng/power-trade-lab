@@ -24,7 +24,7 @@ cp frontend/.env.example frontend/.env
 不创建 `.env` 也可以运行：
 
 ```bash
-./start.sh
+./script/sh/start-all.sh
 ```
 
 开发环境会自动完成：

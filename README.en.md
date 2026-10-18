@@ -9,12 +9,12 @@ English | **[简体中文](README.md)**
   <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.141-009688?logo=fastapi&logoColor=white">
   <img alt="Vue" src="https://img.shields.io/badge/Vue-3-42B883?logo=vuedotjs&logoColor=white">
   <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white">
-  <img alt="Node" src="https://img.shields.io/badge/Node.js-20%2B-339933?logo=nodedotjs&logoColor=white">
+  <img alt="Node" src="https://img.shields.io/badge/Node.js-22.12%2B-339933?logo=nodedotjs&logoColor=white">
   <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg">
   <img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-5B67F1">
 </p>
 
-Electricity trading is not a stock terminal with power-industry vocabulary bolted on. Power Trade Lab puts **real market rules, public data, active learning, and reproducible simulation** into a single self-hostable full-stack application:
+Electricity trading is not a stock terminal with power-industry vocabulary bolted on. Power Trade Lab combines market-learning materials, public-data ingestion, quizzes, exams, and two reproducible 24-period day-ahead teaching scenarios in a self-hostable full-stack application:
 
 ```text
 Rules & real data → Knowledge base & courses → Quizzes & exams → Trading simulation → Settlement & review → Targeted re-learning ↺
@@ -37,29 +37,29 @@ Rules & real data → Knowledge base & courses → Quizzes & exams → Trading s
 ## 🧭 What makes it different
 
 1. **Honest data provenance** — every market/simulation datum carries one of four source levels: `observed_public` / `observed_authorized` / `reconstructed` / `synthetic`. Reconstructed or synthetic data is **never** disguised as real-time market data.
-2. **Reproducible simulation** — the same scenario, rule version, inputs, random seed, and bid set always produce the same clearing result.
-3. **A closed loop, not a pile of features** — weaknesses found in simulation review flow back into course and quiz recommendations.
+2. **Replayable day-ahead scenarios** — the two single-player scenarios persist the rule version, inputs, random seed, bids, clearing, settlement, and review snapshots. The legacy terminal is outside this guarantee.
+3. **Connected learning surfaces** — courses, quizzes, exams, materials, and simulation reviews live in one application. Automatic review-to-learning-plan write-back is still roadmap work.
 4. **Zero-config start** — runs with no third-party API keys; AI, weather, and document parsing are all optional enhancements.
-5. **BYOK by design** — the project collects no user API keys; each user supplies their own, encrypted at rest.
+5. **BYOK by design** — each user supplies their own key, which is encrypted at rest in that deployment's database.
 
 ## 🚀 Quick Start
 
-Requirements: macOS / Linux (WSL2 on Windows), Python 3.11/3.12, Node.js 20+, npm.
+Requirements: macOS / Linux (WSL2 on Windows), Python 3.11/3.12, Node.js 22.12+, npm, and curl. Docker is not required.
 
 ```bash
 git clone https://github.com/wenpeifeng/power-trade-lab.git
 cd power-trade-lab
 
 # Creates virtual environments and installs dependencies on first run
-./start.sh
+./script/sh/start-all.sh
 ```
 
 - Web: <http://127.0.0.1:5173>
 - API docs: <http://127.0.0.1:8000/docs>
 
-Stop with `./stop.sh`. Register a normal account on first launch — basic learning, quizzes, and simulation need no weather, AI, or MinerU configuration. The single configuration entry point is `backend/.env` (copy from `backend/.env.example`); see the [configuration guide](docs/CONFIGURATION.md) (Chinese) for the full field reference.
+Check with `./script/sh/status-all.sh` and stop with `./script/sh/stop-all.sh`. Register a normal account on first launch; the repository has no demo account or default password. Backend settings come from `backend/.env`, while optional frontend proxy settings come from `frontend/.env`. See the [configuration guide](docs/CONFIGURATION.md) (Chinese).
 
-**Note:** the repository ships without business data. Each deployment pulls its own public data via the Data Asset Center (admin account → asset center → run crawlers / paste a cURL command / upload files). See the [data asset tools guide](docs/数据资产工具使用说明.md) (Chinese).
+**Note:** the repository ships deterministic teaching seed records in source code, but no runtime database or user records. The seed is not a verified official dataset. Each deployment may ingest its own authorized data through the Data Asset Center. See the [data asset tools guide](docs/数据资产工具使用说明.md) (Chinese).
 
 ## 🧱 Tech Stack
 
@@ -67,7 +67,7 @@ Stop with `./stop.sh`. Register a normal account on first launch — basic learn
 |---|---|
 | Frontend | Vue 3, Vite, Element Plus, ECharts, VueUse Motion |
 | Backend | FastAPI, Pydantic, SQLAlchemy, APScheduler |
-| Database | SQLite (local) / PostgreSQL (recommended for production) |
+| Database | SQLite (the only ready-to-run path); PostgreSQL requires additional driver and migration work |
 | Document parsing | pdfplumber + optional MinerU service |
 | Retrieval | BM25, semantic vectors, hybrid search with optional reranking |
 | Security | HttpOnly cookies, role-based access, per-user AI key encryption, outbound SSRF protection |

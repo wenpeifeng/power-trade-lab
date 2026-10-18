@@ -27,7 +27,7 @@
 ## 本地开发
 
 ```bash
-./start.sh
+./script/sh/start-all.sh
 ```
 
 访问 Web：<http://127.0.0.1:5173>，API 文档：<http://127.0.0.1:8000/docs>。
@@ -49,11 +49,10 @@
 ```bash
 python3 scripts/open_source_check.py
 
-cd backend
-./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'
+backend/.venv/bin/python -m pip install -r backend/requirements-dev.txt
+(cd backend && .venv/bin/python -m pytest -q)
 
-cd ../frontend
-npm run build
+(cd frontend && npm run build)
 ```
 
 如果某项无法运行，必须在 PR 中说明原因和替代验证证据。

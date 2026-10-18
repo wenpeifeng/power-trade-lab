@@ -25,6 +25,8 @@ import numpy as np
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.config import settings
+
 logger = logging.getLogger("vector_kb")
 
 # 国内镜像（huggingface.co 国内不可达，走 hf-mirror.com）
@@ -39,8 +41,8 @@ os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 # ============ 可配置项（语料大了随时切模型，不改代码）============
 # 当前语料 <500 篇：bge-small-zh-v1.5（512维，轻量，已缓存）
 # 语料 500+ 篇后切：BAAI/bge-m3（1024维，多语言，更准但2.3GB）
-EMBEDDING_MODEL_NAME = os.environ.get("KB_EMBEDDING_MODEL", "BAAI/bge-small-zh-v1.5")
-EMBEDDING_DIM = int(os.environ.get("KB_EMBEDDING_DIM", "512"))
+EMBEDDING_MODEL_NAME = settings.KB_EMBEDDING_MODEL
+EMBEDDING_DIM = settings.KB_EMBEDDING_DIM
 CHUNK_SIZE = 300      # 每块约300字
 CHUNK_OVERLAP = 50    # 块间重叠50字，保证语义连贯
 
@@ -385,7 +387,7 @@ def rerank(query: str, documents: list[dict], top_k: int = 5) -> list[dict]:
       export KB_RERANKER_MODEL=BAAI/bge-reranker-base
     """
     global _reranker
-    reranker_model = os.environ.get("KB_RERANKER_MODEL", "")
+    reranker_model = settings.KB_RERANKER_MODEL
 
     # 未配置重排模型 → 直接返回（当前阶段）
     if not reranker_model:

@@ -3,7 +3,7 @@
 ## 每次提交前
 
 1. 运行 `python3 scripts/open_source_check.py`。
-2. 运行后端测试：`cd backend && ./.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`。
+2. 安装测试依赖并运行全部后端测试：`backend/.venv/bin/python -m pip install -r backend/requirements-dev.txt && (cd backend && .venv/bin/python -m pytest -q)`。
 3. 运行后端漏洞审计：`cd backend && uvx pip-audit --path .venv/lib/python3.12/site-packages`。
 4. 运行前端构建和审计：`cd frontend && npm run build && npm audit --omit=dev --registry=https://registry.npmjs.org`。
 5. 确认 `git status --ignored` 中 `.env`、数据库、教材、附件、原始抓取数据、日志和 `.zcode` 均未进入暂存区。
