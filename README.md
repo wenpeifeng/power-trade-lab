@@ -4,6 +4,8 @@
 
 **[English](README.en.md)** | 简体中文
 
+[快速开始](#-快速开始) · [能力闭环](#-产品能力闭环) · [配置](#️-配置哪些必填哪些选填) · [开发与验证](#️-开发与验证) · [任务与完成定义](#-任务与完成定义) · [已知限制](#️-已知限制坦诚边界)
+
 <p>
   <img alt="Python" src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white">
   <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-0.141-009688?logo=fastapi&logoColor=white">
@@ -277,6 +279,7 @@ power-trade-lab/
 |---|---|---|---|
 | Python 包（FastAPI、pdfplumber、playwright…） | `backend/.venv/` | `./start.sh` 首次运行 | 总是 |
 | JS 包（Vue、Vite、Element Plus…） | `frontend/node_modules/` | `./start.sh` 首次运行 | 总是 |
+| Puppeteer 浏览器 | Puppeteer 系统缓存 | 按需运行 `cd frontend && npx puppeteer browsers install chrome` | 仅浏览器 E2E |
 | Playwright Chromium 浏览器 | 系统缓存（`~/Library/Caches/ms-playwright/`） | `backend/.venv/bin/playwright install chromium` | 仅交易中心动态页爬虫需要 |
 | MinerU 解析服务 | 独立部署，HTTP 调用（不在本仓库） | 部署者自行安装运行 | 仅复杂 PDF/Word 解析需要 |
 | 和风天气、GLM 等 API | 远程服务，无需本地安装 | 在 `.env`/页面填凭证 | 可选 |
@@ -299,6 +302,31 @@ npm run build
 ```
 
 贡献前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。系统设计基线见 [AGENTS.md](AGENTS.md) 与 [产品路线图](docs/交易模拟平台产品基线与路线图.md)。
+
+## ✅ 任务与完成定义
+
+本项目采用与「飞书大脑」一致的可验证任务格式：每个任务必须先冻结改动文件、输入输出契约和安全边界，再经历“失败测试 → 最小实现 → 自动验证 → 交付报告”。页面存在、代码提交或单个案例可运行，都不能单独算完成。
+
+当前工作流分成六条可独立验收的主线：
+
+| 任务流 | 交付结果 | 最低完成证据 |
+|---|---|---|
+| T1 数据与规则底座 | 带来源、许可、版本和质量状态的数据资产 | 来源证据、增量/去重测试、失败样本 |
+| T2 学习与考试 | 课程、题目、错题和掌握度闭环 | 正常/边界/权限测试与可追溯引用 |
+| T3 仿真交易 | 申报、出清、结算、复盘的确定性链路 | 同种子复现、守恒对账、非法输入测试 |
+| T4 跨模块回流 | 复盘薄弱点回流课程与题目 | 端到端案例和回归结果 |
+| T5 数据接入与安全 | 公开/授权数据连接器与凭证隔离 | 双用户隔离、脱敏日志、撤销与降级测试 |
+| T6 安装与发布 | 新环境可复现安装、启动、验证和回滚 | 干净克隆、健康检查、真实注册/登录、重复启停 |
+
+任务模板、当前状态和提交前检查见 [项目任务与交付契约](docs/PROJECT_TASKS.md)。
+
+## ⚠️ 已知限制（坦诚边界）
+
+- 当前是教学与研究技术基线，不是持牌交易系统，也未达到真实交易生产标准。
+- SQLite 适合本地单机；PostgreSQL 迁移、正式 schema migration 和多实例部署尚未闭环。
+- 省级规则包、96 点约束、真实公开行情覆盖和可公开再分发的数据集仍在扩充。
+- AI、MinerU、和风天气与飞书导入均为可选外部能力；未配置时会关闭或降级，不能据此宣称对应能力已验证。
+- 当前自动化测试仍在补齐。任何“已完成”结论都应以任务文档中记录的实际命令、断言和真实链路证据为准。
 
 ## 🗺️ 路线图
 
