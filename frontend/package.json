@@ -13,7 +13,7 @@
     "@vueuse/motion": "^3.0.3",
     "axios": "^1.20.0",
     "countup.js": "^2.10.1",
-    "driver.js": "^1.7.0",
+    "driver.js": "^1.10.2",
     "echarts": "^6.1.0",
     "element-plus": "^2.14.3",
     "lucide-vue-next": "^0.577.0",
