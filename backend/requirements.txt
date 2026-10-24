@@ -1,6 +1,6 @@
 APScheduler==3.11.3
 PyYAML==6.0.3
-SQLAlchemy==2.0.51
+SQLAlchemy==2.0.52
 bcrypt==4.0.1
 beautifulsoup4==4.15.0
 cryptography==50.0.0
